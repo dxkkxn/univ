@@ -43,14 +43,14 @@ void main (int argc, char **argv) {
             for (int j = 0; j < 3; j++) {
                 random_num = (rand() % 10) + 1;
                 msgp.arr[0] = random_num;
-                if (msgsnd(msgid, &msgp, sizeof(msgp.arr), 0) < 0) {
+                if ((msgsnd(msgid, &msgp, sizeof(msgp.arr), 0)) < 0) {
                     perror("msgsnd failed"), printf("errno = %d\n", errno), exit(-1);
                 }
                 printf("[child %d] Sent num = %d\n", i+1, random_num);
                 sleep(rand() % 3 + 1);
             }
             msgp.mtype = N+1;
-            if (msgsnd(msgid, &msgp, sizeof(msgp.arr), 0) < 0) {
+            if ((msgsnd(msgid, &msgp, sizeof(msgp.arr), 0)) < 0) {
                 perror("msgsnd failed"), printf("errno = %d\n", errno), exit(-1);
             }
             printf("[child %d] Finished\n", i+1);
@@ -66,7 +66,7 @@ void main (int argc, char **argv) {
     print_list(sum_child, N);
     int end = N;
     while (end) {
-        if (msgrcv(msgid, &msgp, sizeof(msgp.arr), 0, 0) < 0) {
+        if ((msgrcv(msgid, &msgp, sizeof(msgp.arr)), 0, 0) < 0) {
             perror("msgrcv failed"), printf("errno = %d\n", errno), exit(-1);
         }
         if (msgp.mtype == (N+1)) {
